@@ -113,18 +113,18 @@ fn check_autostart() -> Result<bool, String> {
     }
 }
 
-/// Updates the system tray icon based on connection status
+/// Updates the system tray icon and window icon based on connection status
 /// Green icon for connected, red for disconnected
 fn update_tray_icon(app: &AppHandle, connected: bool) {
-    if let Some(tray) = app.tray_by_id("main-tray") {
-        // Choose status based on connection
-        let status = if connected {
-            IconStatus::Connected
-        } else {
-            IconStatus::Disconnected
-        };
+    // Choose status based on connection
+    let status = if connected {
+        IconStatus::Connected
+    } else {
+        IconStatus::Disconnected
+    };
 
-        // Load icon from file
+    // Update tray icon
+    if let Some(tray) = app.tray_by_id("main-tray") {
         let icon = load_tray_icon(status);
         let _ = tray.set_icon(Some(icon));
 
@@ -135,6 +135,12 @@ fn update_tray_icon(app: &AppHandle, connected: bool) {
             "Mullvad VPN: Disconnected"
         };
         let _ = tray.set_tooltip(Some(tooltip));
+    }
+
+    // Update window/taskbar icon
+    if let Some(window) = app.get_webview_window("main") {
+        let icon = load_tray_icon(status);
+        let _ = window.set_icon(icon);
     }
 }
 
@@ -292,15 +298,11 @@ pub fn run() {
             // Handle window close event to hide instead of quit
             let window = app.get_webview_window("main").unwrap();
 
-            // Set window icon for taskbar
+            // Set initial window icon for taskbar (unknown status)
             #[cfg(target_os = "windows")]
             {
-                let icon_path = std::path::Path::new("icons").join("icon.png");
-                if let Ok(icon_bytes) = std::fs::read(&icon_path) {
-                    if let Ok(icon) = Image::from_bytes(&icon_bytes) {
-                        let _ = window.set_icon(icon);
-                    }
-                }
+                let icon = load_tray_icon(IconStatus::Unknown);
+                let _ = window.set_icon(icon);
             }
 
             let window_clone = window.clone();
