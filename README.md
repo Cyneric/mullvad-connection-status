@@ -1,5 +1,12 @@
 # Mullvad Connection Status
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Platform](https://img.shields.io/badge/Platform-Windows-0078D4?logo=windows&logoColor=white)](https://github.com/Cyneric/mullvad-connection-status)
+[![Tauri](https://img.shields.io/badge/Tauri-v2-FFC131?logo=tauri&logoColor=white)](https://tauri.app/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![Latest Release](https://img.shields.io/github/v/release/Cyneric/mullvad-connection-status)](https://github.com/Cyneric/mullvad-connection-status/releases)
+
 A lightweight Windows system tray application for monitoring Mullvad VPN connection status in real-time. Built with Tauri, React, TypeScript, and Tailwind CSS.
 
 ## Quick Start
@@ -25,16 +32,21 @@ This application provides a visual indicator for your Mullvad VPN connection sta
 ## Features
 
 - **System Tray Integration** - Unobtrusive tray icon that changes color based on VPN status (green for connected, red for disconnected)
+- **Custom Title Bar** - Modern, draggable window with minimize and close controls that blend with the application design
 - **Real-time Monitoring** - Checks VPN connection status every 15 seconds
 - **Connection Details** - View your current IP address, server location, hostname, and protocol type
+- **Country Flags** - Visual country flag indicators showing which VPN server location you're connected to
+- **Auto-Start Settings** - Built-in UI toggle to enable/disable automatic startup with Windows
 - **Desktop Notifications** - Optional alerts when your VPN connection state changes
+- **Taskbar Integration** - Window appears in the taskbar when open for easy access and management
 
 
 ## Technology Stack
 
 - **Frontend**: React 18, TypeScript, Tailwind CSS, shadcn/ui components
+- **Icons**: Lucide React, country-flag-icons, Material Symbols
 - **Backend**: Rust (Tauri v2 framework)
-- **Build Tools**: Vite, npm
+- **Build Tools**: Vite, npm, Sharp (for icon generation)
 - **APIs**: Mullvad public API (am.i.mullvad.net)
 
 ## Prerequisites
@@ -170,24 +182,35 @@ By default, the application checks VPN status every 15 seconds. To modify this:
 
 ## Windows Auto-Start Setup
 
-To launch the application automatically when Windows starts:
+The application includes a built-in auto-start toggle in the Settings page:
 
-### Method 1: Startup Folder (Recommended)
+### Using the Settings UI (Recommended)
 
+1. Launch the application
+2. Click the tray icon to open the status window
+3. Click the Settings (gear) icon in the top navigation
+4. Toggle the "Start at Windows boot" switch
+5. The application will now start automatically when Windows boots
+
+The auto-start feature uses the Windows Registry method (`HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run`) and can be easily toggled on or off from the Settings page.
+
+### Manual Methods (Alternative)
+
+If you prefer manual setup:
+
+**Startup Folder Method:**
 1. Build the application using `npm run tauri build`
-2. Navigate to the executable location: `src-tauri/target/release/`
-3. Right-click on `mullvad-connection-status.exe` and select "Create shortcut"
-4. Press `Win + R` and type `shell:startup`, then press Enter
-5. Move the shortcut into the Startup folder that opens
+2. Navigate to: `src-tauri/target/release/`
+3. Right-click on `mullvad-connection-status.exe` → "Create shortcut"
+4. Press `Win + R`, type `shell:startup`, press Enter
+5. Move the shortcut into the Startup folder
 
-### Method 2: Windows Registry (Advanced)
-
-1. Press `Win + R` and type `regedit`, then press Enter
+**Registry Method:**
+1. Press `Win + R`, type `regedit`, press Enter
 2. Navigate to: `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run`
-3. Create a new String Value:
+3. Create String Value:
    - Name: `MullvadConnectionStatus`
    - Value: `"C:\full\path\to\mullvad-connection-status.exe"`
-4. Restart your computer to test
 
 ## How It Works
 
@@ -216,11 +239,17 @@ This information is displayed in a clean, minimal interface accessible by clicki
 ### Status Window
 
 When you click the tray icon, a window appears showing:
-- Connection status with a visual indicator
+- Connection status with a visual indicator and country flag
 - Your current IP address
-- Server location (city and country)
+- Server location (city and country) with flag icon
 - Server hostname
 - Connection protocol type
+
+The window features:
+- **Custom draggable title bar** - Click and hold the left side to move the window
+- **Minimize button** - Minimize to taskbar (window remains in taskbar for easy restoration)
+- **Close button** - Hides the window to system tray (application continues running)
+- **Settings page** - Configure auto-start and other preferences
 
 Click the close button or the tray icon again to hide the window. The application continues running in the background.
 
