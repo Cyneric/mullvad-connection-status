@@ -118,10 +118,7 @@ function App() {
         <div className="mx-auto max-w-md space-y-4 animate-in fade-in duration-300">
           {currentPage === 'status' ? (
             <>
-              <StatusCard
-                connected={status?.connected ?? false}
-                country={status?.country}
-              />
+              <StatusCard connected={status?.connected ?? false} country={status?.country} />
               {status && <ConnectionDetails status={status} />}
             </>
           ) : (

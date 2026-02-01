@@ -37,9 +37,10 @@ export function ConnectionDetails({ status }: ConnectionDetailsProps) {
     return null;
   }
 
-  const locationText = status.city && status.country
-    ? `${status.city}, ${status.country}`
-    : status.country || 'Unknown';
+  const locationText =
+    status.city && status.country
+      ? `${status.city}, ${status.country}`
+      : status.country || 'Unknown';
 
   const details = [
     {

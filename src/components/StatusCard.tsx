@@ -30,21 +30,25 @@ interface StatusCardProps {
  */
 export function StatusCard({ connected, country }: StatusCardProps) {
   return (
-    <Card className={cn(
-      'border-2 shadow-lg transition-all duration-300',
-      connected
-        ? 'border-green-500/20 bg-gradient-to-br from-green-50/50 to-background dark:from-green-950/20'
-        : 'border-destructive/20 bg-gradient-to-br from-red-50/50 to-background dark:from-red-950/20'
-    )}>
+    <Card
+      className={cn(
+        'border-2 shadow-lg transition-all duration-300',
+        connected
+          ? 'border-green-500/20 bg-gradient-to-br from-green-50/50 to-background dark:from-green-950/20'
+          : 'border-destructive/20 bg-gradient-to-br from-red-50/50 to-background dark:from-red-950/20'
+      )}
+    >
       <CardContent className="pt-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className={cn(
-              'p-3 rounded-2xl transition-all duration-300 relative',
-              connected
-                ? 'bg-green-500/10 ring-2 ring-green-500/20'
-                : 'bg-destructive/10 ring-2 ring-destructive/20'
-            )}>
+            <div
+              className={cn(
+                'p-3 rounded-2xl transition-all duration-300 relative',
+                connected
+                  ? 'bg-green-500/10 ring-2 ring-green-500/20'
+                  : 'bg-destructive/10 ring-2 ring-destructive/20'
+              )}
+            >
               {connected ? (
                 <ShieldEncrypted className="h-14 w-14 text-green-600 dark:text-green-400" />
               ) : (
@@ -57,10 +61,12 @@ export function StatusCard({ connected, country }: StatusCardProps) {
               )}
             </div>
             <div>
-              <h2 className={cn(
-                'text-2xl font-bold mb-1 transition-colors flex items-center gap-2',
-                connected ? 'text-green-700 dark:text-green-400' : 'text-destructive'
-              )}>
+              <h2
+                className={cn(
+                  'text-2xl font-bold mb-1 transition-colors flex items-center gap-2',
+                  connected ? 'text-green-700 dark:text-green-400' : 'text-destructive'
+                )}
+              >
                 {connected ? 'Connected' : 'Disconnected'}
               </h2>
               <p className="text-sm text-muted-foreground flex items-center gap-1.5">
@@ -78,10 +84,7 @@ export function StatusCard({ connected, country }: StatusCardProps) {
               </p>
             </div>
           </div>
-          <Badge
-            variant={connected ? 'success' : 'destructive'}
-            className="shadow-sm"
-          >
+          <Badge variant={connected ? 'success' : 'destructive'} className="shadow-sm">
             {connected ? 'ACTIVE' : 'INACTIVE'}
           </Badge>
         </div>

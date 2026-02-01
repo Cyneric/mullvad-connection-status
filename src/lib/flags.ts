@@ -15,63 +15,63 @@
  */
 const COUNTRY_CODES: Record<string, string> = {
   // Europe
-  'Austria': 'AT',
-  'Belgium': 'BE',
-  'Bulgaria': 'BG',
-  'Croatia': 'HR',
-  'Cyprus': 'CY',
+  Austria: 'AT',
+  Belgium: 'BE',
+  Bulgaria: 'BG',
+  Croatia: 'HR',
+  Cyprus: 'CY',
   'Czech Republic': 'CZ',
-  'Czechia': 'CZ',
-  'Denmark': 'DK',
-  'Estonia': 'EE',
-  'Finland': 'FI',
-  'France': 'FR',
-  'Germany': 'DE',
-  'Greece': 'GR',
-  'Hungary': 'HU',
-  'Ireland': 'IE',
-  'Italy': 'IT',
-  'Latvia': 'LV',
-  'Lithuania': 'LT',
-  'Luxembourg': 'LU',
-  'Malta': 'MT',
-  'Netherlands': 'NL',
-  'Poland': 'PL',
-  'Portugal': 'PT',
-  'Romania': 'RO',
-  'Slovakia': 'SK',
-  'Slovenia': 'SI',
-  'Spain': 'ES',
-  'Sweden': 'SE',
+  Czechia: 'CZ',
+  Denmark: 'DK',
+  Estonia: 'EE',
+  Finland: 'FI',
+  France: 'FR',
+  Germany: 'DE',
+  Greece: 'GR',
+  Hungary: 'HU',
+  Ireland: 'IE',
+  Italy: 'IT',
+  Latvia: 'LV',
+  Lithuania: 'LT',
+  Luxembourg: 'LU',
+  Malta: 'MT',
+  Netherlands: 'NL',
+  Poland: 'PL',
+  Portugal: 'PT',
+  Romania: 'RO',
+  Slovakia: 'SK',
+  Slovenia: 'SI',
+  Spain: 'ES',
+  Sweden: 'SE',
   'United Kingdom': 'GB',
-  'UK': 'GB',
+  UK: 'GB',
 
   // Americas
-  'Canada': 'CA',
+  Canada: 'CA',
   'United States': 'US',
-  'USA': 'US',
-  'Brazil': 'BR',
-  'Mexico': 'MX',
-  'Argentina': 'AR',
-  'Chile': 'CL',
+  USA: 'US',
+  Brazil: 'BR',
+  Mexico: 'MX',
+  Argentina: 'AR',
+  Chile: 'CL',
 
   // Asia Pacific
-  'Australia': 'AU',
+  Australia: 'AU',
   'New Zealand': 'NZ',
-  'Japan': 'JP',
-  'Singapore': 'SG',
+  Japan: 'JP',
+  Singapore: 'SG',
   'Hong Kong': 'HK',
   'South Korea': 'KR',
-  'India': 'IN',
-  'Taiwan': 'TW',
+  India: 'IN',
+  Taiwan: 'TW',
 
   // Other
-  'Switzerland': 'CH',
-  'Norway': 'NO',
-  'Iceland': 'IS',
-  'Israel': 'IL',
+  Switzerland: 'CH',
+  Norway: 'NO',
+  Iceland: 'IS',
+  Israel: 'IL',
   'South Africa': 'ZA',
-  'UAE': 'AE',
+  UAE: 'AE',
   'United Arab Emirates': 'AE',
 };
 
@@ -94,9 +94,7 @@ export function getCountryFlag(countryName: string | undefined): string {
 
   // Convert ISO code to flag emoji
   // Each letter is converted to its regional indicator symbol
-  const codePoints = [...code].map(
-    (char) => 127397 + char.charCodeAt(0)
-  );
+  const codePoints = [...code].map((char) => 127397 + char.charCodeAt(0));
 
   return String.fromCodePoint(...codePoints);
 }
@@ -111,7 +109,41 @@ export function getCountryColor(countryCode: string | undefined): string {
   if (!countryCode) return 'bg-blue-500';
 
   // Europe - Blue
-  if (['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB', 'CH', 'NO', 'IS'].includes(countryCode)) {
+  if (
+    [
+      'AT',
+      'BE',
+      'BG',
+      'HR',
+      'CY',
+      'CZ',
+      'DK',
+      'EE',
+      'FI',
+      'FR',
+      'DE',
+      'GR',
+      'HU',
+      'IE',
+      'IT',
+      'LV',
+      'LT',
+      'LU',
+      'MT',
+      'NL',
+      'PL',
+      'PT',
+      'RO',
+      'SK',
+      'SI',
+      'ES',
+      'SE',
+      'GB',
+      'CH',
+      'NO',
+      'IS',
+    ].includes(countryCode)
+  ) {
     return 'bg-blue-500';
   }
   // Americas - Green

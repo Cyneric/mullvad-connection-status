@@ -23,7 +23,11 @@ interface TitleBarProps {
  * Custom title bar component that replaces native window decorations
  * Includes drag region and window control buttons
  */
-export function TitleBar({ title = 'Mullvad Status', showControls = true, className }: TitleBarProps) {
+export function TitleBar({
+  title = 'Mullvad Status',
+  showControls = true,
+  className,
+}: TitleBarProps) {
   const appWindow = getCurrentWindow();
 
   const handleMinimize = async () => {
@@ -49,10 +53,7 @@ export function TitleBar({ title = 'Mullvad Status', showControls = true, classN
         className
       )}
     >
-      <div
-        className="flex items-center gap-2 flex-1 cursor-move"
-        onMouseDown={handleDragStart}
-      >
+      <div className="flex items-center gap-2 flex-1 cursor-move" onMouseDown={handleDragStart}>
         <div className="w-2 h-2 rounded-full bg-white/60"></div>
         <span className="font-medium text-sm">{title}</span>
       </div>
