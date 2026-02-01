@@ -46,7 +46,7 @@
         "fullscreen": false,
         "decorations": false,
         "alwaysOnTop": false,
-        "skipTaskbar": true,
+        "skipTaskbar": false,
         "center": true,
         "visible": false,
         "transparent": false

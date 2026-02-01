@@ -34,29 +34,38 @@ export function TitleBar({ title = 'Mullvad Status', showControls = true, classN
     await appWindow.hide();
   };
 
+  const handleDragStart = async (e: React.MouseEvent) => {
+    // Only start dragging on left mouse button
+    if (e.button === 0) {
+      await appWindow.startDragging();
+    }
+  };
+
   return (
     <div
-      data-tauri-drag-region
       className={cn(
         'flex items-center justify-between h-12 px-4 bg-gradient-to-r from-[#294d73] to-[#1a3a56] text-white',
-        'cursor-move select-none',
+        'select-none',
         className
       )}
     >
-      <div data-tauri-drag-region className="flex items-center gap-2 flex-1">
+      <div
+        className="flex items-center gap-2 flex-1 cursor-move"
+        onMouseDown={handleDragStart}
+      >
         <div className="w-2 h-2 rounded-full bg-white/60"></div>
         <span className="font-medium text-sm">{title}</span>
       </div>
 
       {showControls && (
-        <div className="flex items-center gap-1 pointer-events-auto">
+        <div className="flex items-center gap-1 flex-shrink-0">
           <button
             onClick={handleMinimize}
             className="p-2 hover:bg-white/10 rounded transition-colors cursor-pointer"
             aria-label="Minimize"
             type="button"
           >
-            <Minus className="h-4 w-4 pointer-events-none" />
+            <Minus className="h-4 w-4" />
           </button>
           <button
             onClick={handleClose}
@@ -64,7 +73,7 @@ export function TitleBar({ title = 'Mullvad Status', showControls = true, classN
             aria-label="Close"
             type="button"
           >
-            <X className="h-4 w-4 pointer-events-none" />
+            <X className="h-4 w-4" />
           </button>
         </div>
       )}

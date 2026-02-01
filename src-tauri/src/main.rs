@@ -291,6 +291,18 @@ pub fn run() {
 
             // Handle window close event to hide instead of quit
             let window = app.get_webview_window("main").unwrap();
+
+            // Set window icon for taskbar
+            #[cfg(target_os = "windows")]
+            {
+                let icon_path = std::path::Path::new("icons").join("icon.ico");
+                if let Ok(icon_bytes) = std::fs::read(&icon_path) {
+                    if let Ok(icon) = Image::from_bytes(&icon_bytes) {
+                        let _ = window.set_icon(icon);
+                    }
+                }
+            }
+
             let window_clone = window.clone();
             window.on_window_event(move |event| {
                 if let tauri::WindowEvent::CloseRequested { api, .. } = event {
