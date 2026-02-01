@@ -1,0 +1,51 @@
+/**
+ * @file build-test.yml
+ *
+ * @created 2026-02-01
+ * @author Christian Blank <christianblank91@gmail.com>
+ *
+ * @copyright 2026 Christian Blank
+ *
+ * @description GitHub Actions workflow for testing builds on push
+ */
+
+name: Build Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Check TypeScript
+        run: npm run build
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Build Tauri app (test)
+        run: npm run tauri build

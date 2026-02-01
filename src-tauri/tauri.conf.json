@@ -1,0 +1,60 @@
+{
+  "productName": "Mullvad Connection Status",
+  "version": "0.1.0",
+  "identifier": "com.christianblank.mullvad-status",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "publisher": "Christian Blank",
+    "copyright": "Copyright © 2026 Christian Blank",
+    "longDescription": "A lightweight Windows 11 system tray application for monitoring Mullvad VPN connection status in real-time.",
+    "shortDescription": "Mullvad VPN connection status indicator",
+    "windows": {
+      "certificateThumbprint": null,
+      "digestAlgorithm": "sha256",
+      "timestampUrl": "",
+      "wix": {
+        "language": "en-US"
+      },
+      "nsis": {
+        "installerIcon": "icons/icon.ico",
+        "displayLanguageSelector": false,
+        "installMode": "currentUser"
+      }
+    }
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Mullvad Connection Status",
+        "width": 420,
+        "height": 580,
+        "resizable": false,
+        "fullscreen": false,
+        "decorations": false,
+        "alwaysOnTop": false,
+        "skipTaskbar": true,
+        "center": true,
+        "visible": false,
+        "transparent": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "plugins": {}
+}

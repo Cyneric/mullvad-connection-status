@@ -1,0 +1,37 @@
+# Dependencies
+node_modules
+
+# Build outputs
+dist
+dist-ssr
+build
+out
+target
+
+# Cache
+.cache
+.vite
+.turbo
+
+# Logs
+*.log
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode
+.idea
+
+# Tauri
+src-tauri/target
+src-tauri/Cargo.lock
+
+# Documentation
+*.md
