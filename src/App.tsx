@@ -16,7 +16,6 @@ import { StatusCard } from './components/StatusCard';
 import { ConnectionDetails } from './components/ConnectionDetails';
 import { Settings } from './components/Settings';
 import { TitleBar } from './components/TitleBar';
-import { cn } from './lib/utils';
 import { ArrowLeftIcon } from 'lucide-react';
 import SettingsIconSvg from '@/assets/icons/settings.svg?react';
 
