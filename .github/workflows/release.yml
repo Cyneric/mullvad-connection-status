@@ -22,8 +22,9 @@ jobs:
         with:
           lfs: false
           fetch-depth: 1
-          # Preserve LF line endings
-          autocrlf: false
+
+      - name: Configure Git line endings
+        run: git config --global core.autocrlf false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -63,8 +64,9 @@ jobs:
         with:
           lfs: false
           fetch-depth: 1
-          # Preserve LF line endings on Windows
-          autocrlf: false
+
+      - name: Configure Git line endings
+        run: git config --global core.autocrlf false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
