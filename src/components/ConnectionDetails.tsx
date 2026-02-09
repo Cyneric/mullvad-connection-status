@@ -9,6 +9,7 @@
  * @description Component displaying detailed VPN connection information
  */
 
+import { useTranslation } from 'react-i18next';
 import { Globe, MapPin, Server, Network } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { CountryBadge } from './CountryBadge';
@@ -33,6 +34,8 @@ interface ConnectionDetailsProps {
  * @param status - The current VPN status including connection details
  */
 export function ConnectionDetails({ status }: ConnectionDetailsProps) {
+  const { t } = useTranslation();
+
   if (!status.connected) {
     return null;
   }
@@ -40,31 +43,31 @@ export function ConnectionDetails({ status }: ConnectionDetailsProps) {
   const locationText =
     status.city && status.country
       ? `${status.city}, ${status.country}`
-      : status.country || 'Unknown';
+      : status.country || t('details.unknown');
 
   const details = [
     {
       icon: Globe,
-      label: 'IP Address',
-      value: status.ip || 'Unknown',
+      label: t('details.ipAddress'),
+      value: status.ip || t('details.unknown'),
       badge: null,
     },
     {
       icon: MapPin,
-      label: 'Location',
+      label: t('details.location'),
       value: locationText,
       badge: status.country ? <CountryBadge country={status.country} size="sm" /> : null,
     },
     {
       icon: Server,
-      label: 'Server',
-      value: status.hostname || 'Unknown',
+      label: t('details.server'),
+      value: status.hostname || t('details.unknown'),
       badge: null,
     },
     {
       icon: Network,
-      label: 'Protocol',
-      value: status.server_type?.toUpperCase() || 'Unknown',
+      label: t('details.protocol'),
+      value: status.server_type?.toUpperCase() || t('details.unknown'),
       badge: null,
     },
   ];
@@ -73,7 +76,7 @@ export function ConnectionDetails({ status }: ConnectionDetailsProps) {
     <Card className="shadow-md border-muted/40">
       <CardHeader className="pb-3">
         <CardTitle className="text-lg font-semibold flex items-center gap-2">
-          Connection Details
+          {t('details.title')}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">

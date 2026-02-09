@@ -9,6 +9,7 @@
  * @description Custom title bar with window controls and drag functionality
  */
 
+import { useTranslation } from 'react-i18next';
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import { X, Minus } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -23,12 +24,10 @@ interface TitleBarProps {
  * Custom title bar component that replaces native window decorations
  * Includes drag region and window control buttons
  */
-export function TitleBar({
-  title = 'Mullvad Status',
-  showControls = true,
-  className,
-}: TitleBarProps) {
+export function TitleBar({ title, showControls = true, className }: TitleBarProps) {
+  const { t } = useTranslation();
   const appWindow = getCurrentWindow();
+  const displayTitle = title || t('titleBar.title');
 
   const handleMinimize = async () => {
     await appWindow.minimize();
@@ -54,7 +53,7 @@ export function TitleBar({
       )}
     >
       <div className="flex items-center gap-2 flex-1 cursor-move" onMouseDown={handleDragStart}>
-        <span className="font-medium text-sm">{title}</span>
+        <span className="font-medium text-sm">{displayTitle}</span>
       </div>
 
       {showControls && (
@@ -62,7 +61,7 @@ export function TitleBar({
           <button
             onClick={handleMinimize}
             className="p-2 hover:bg-white/10 rounded transition-colors cursor-pointer"
-            aria-label="Minimize"
+            aria-label={t('titleBar.minimize')}
             type="button"
           >
             <Minus className="h-4 w-4" />
@@ -70,7 +69,7 @@ export function TitleBar({
           <button
             onClick={handleClose}
             className="p-2 hover:bg-red-500/80 rounded transition-colors cursor-pointer"
-            aria-label="Close"
+            aria-label={t('titleBar.close')}
             type="button"
           >
             <X className="h-4 w-4" />

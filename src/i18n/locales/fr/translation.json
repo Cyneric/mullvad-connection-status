@@ -1,0 +1,40 @@
+{
+  "loading": "Chargement du statut...",
+  "nav": {
+    "backToStatus": "Retour au Statut",
+    "connectionStatus": "État de Connexion",
+    "settings": "Paramètres"
+  },
+  "status": {
+    "connected": "Connecté",
+    "disconnected": "Déconnecté",
+    "protectedVia": "Protégé via {{country}}",
+    "trafficProtected": "Votre trafic est protégé",
+    "noConnection": "Aucune connexion VPN détectée",
+    "active": "ACTIF",
+    "inactive": "INACTIF"
+  },
+  "details": {
+    "title": "Détails de Connexion",
+    "ipAddress": "Adresse IP",
+    "location": "Emplacement",
+    "server": "Serveur",
+    "protocol": "Protocole",
+    "unknown": "Inconnu"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "description": "Configurer les préférences de l'application",
+    "language": "Langue",
+    "languageDescription": "Sélectionnez votre langue préférée",
+    "autoStart": "Démarrer au Lancement",
+    "autoStartDescription": "Lancer l'application automatiquement au démarrage de Windows",
+    "darkMode": "Mode Sombre",
+    "darkModeDescription": "Basculer entre le thème clair et sombre"
+  },
+  "titleBar": {
+    "title": "Statut Mullvad",
+    "minimize": "Réduire",
+    "close": "Fermer"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "loading": "Status wird geladen...",
+  "nav": {
+    "backToStatus": "Zurück zum Status",
+    "connectionStatus": "Verbindungsstatus",
+    "settings": "Einstellungen"
+  },
+  "status": {
+    "connected": "Verbunden",
+    "disconnected": "Getrennt",
+    "protectedVia": "Geschützt über {{country}}",
+    "trafficProtected": "Ihr Datenverkehr ist geschützt",
+    "noConnection": "Keine VPN-Verbindung erkannt",
+    "active": "AKTIV",
+    "inactive": "INAKTIV"
+  },
+  "details": {
+    "title": "Verbindungsdetails",
+    "ipAddress": "IP-Adresse",
+    "location": "Standort",
+    "server": "Server",
+    "protocol": "Protokoll",
+    "unknown": "Unbekannt"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "description": "Anwendungseinstellungen konfigurieren",
+    "language": "Sprache",
+    "languageDescription": "Wählen Sie Ihre bevorzugte Sprache",
+    "autoStart": "Beim Start ausführen",
+    "autoStartDescription": "App automatisch beim Windows-Start starten",
+    "darkMode": "Dunkelmodus",
+    "darkModeDescription": "Zwischen hellem und dunklem Design wechseln"
+  },
+  "titleBar": {
+    "title": "Mullvad Status",
+    "minimize": "Minimieren",
+    "close": "Schließen"
+  }
+}

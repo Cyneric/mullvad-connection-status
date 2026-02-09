@@ -2107,6 +2107,7 @@ dependencies = [
 name = "mullvad-connection-status"
 version = "0.1.0"
 dependencies = [
+ "once_cell",
  "reqwest",
  "serde",
  "serde_json",

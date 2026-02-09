@@ -1,0 +1,42 @@
+{
+  "en": {
+    "tray_connected": "Mullvad VPN: Connected",
+    "tray_disconnected": "Mullvad VPN: Disconnected",
+    "tray_show_status": "Show Status",
+    "tray_quit": "Quit",
+    "tray_initial_tooltip": "Mullvad Connection Status",
+    "notification_title": "Mullvad Connection Status",
+    "notification_connected": "Connected to {} server",
+    "notification_disconnected": "VPN connection lost"
+  },
+  "de": {
+    "tray_connected": "Mullvad VPN: Verbunden",
+    "tray_disconnected": "Mullvad VPN: Getrennt",
+    "tray_show_status": "Status anzeigen",
+    "tray_quit": "Beenden",
+    "tray_initial_tooltip": "Mullvad Verbindungsstatus",
+    "notification_title": "Mullvad Verbindungsstatus",
+    "notification_connected": "Verbunden mit {} Server",
+    "notification_disconnected": "VPN-Verbindung verloren"
+  },
+  "es": {
+    "tray_connected": "Mullvad VPN: Conectado",
+    "tray_disconnected": "Mullvad VPN: Desconectado",
+    "tray_show_status": "Mostrar Estado",
+    "tray_quit": "Salir",
+    "tray_initial_tooltip": "Estado de Conexión Mullvad",
+    "notification_title": "Estado de Conexión Mullvad",
+    "notification_connected": "Conectado al servidor {}",
+    "notification_disconnected": "Conexión VPN perdida"
+  },
+  "fr": {
+    "tray_connected": "Mullvad VPN: Connecté",
+    "tray_disconnected": "Mullvad VPN: Déconnecté",
+    "tray_show_status": "Afficher le Statut",
+    "tray_quit": "Quitter",
+    "tray_initial_tooltip": "État de Connexion Mullvad",
+    "notification_title": "État de Connexion Mullvad",
+    "notification_connected": "Connecté au serveur {}",
+    "notification_disconnected": "Connexion VPN perdue"
+  }
+}

@@ -9,6 +9,7 @@
  * @description Main status card component showing VPN connection state
  */
 
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { CountryBadge } from './CountryBadge';
@@ -29,6 +30,8 @@ interface StatusCardProps {
  * @param country - The country the VPN is connected to
  */
 export function StatusCard({ connected, country }: StatusCardProps) {
+  const { t } = useTranslation();
+
   return (
     <Card
       className={cn(
@@ -67,25 +70,25 @@ export function StatusCard({ connected, country }: StatusCardProps) {
                   connected ? 'text-green-700 dark:text-green-400' : 'text-destructive'
                 )}
               >
-                {connected ? 'Connected' : 'Disconnected'}
+                {connected ? t('status.connected') : t('status.disconnected')}
               </h2>
               <p className="text-sm text-muted-foreground flex items-center gap-1.5">
                 {connected ? (
                   <>
                     <span className="inline-block h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                    {country ? `Protected via ${country}` : 'Your traffic is protected'}
+                    {country ? t('status.protectedVia', { country }) : t('status.trafficProtected')}
                   </>
                 ) : (
                   <>
                     <span className="inline-block h-1.5 w-1.5 rounded-full bg-destructive"></span>
-                    No VPN connection detected
+                    {t('status.noConnection')}
                   </>
                 )}
               </p>
             </div>
           </div>
           <Badge variant={connected ? 'success' : 'destructive'} className="shadow-sm">
-            {connected ? 'ACTIVE' : 'INACTIVE'}
+            {connected ? t('status.active') : t('status.inactive')}
           </Badge>
         </div>
       </CardContent>

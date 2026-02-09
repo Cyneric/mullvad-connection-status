@@ -9,6 +9,9 @@
 
 mod vpn_checker;
 
+use once_cell::sync::Lazy;
+use serde::Deserialize;
+use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use tauri::{
     image::Image,
@@ -18,6 +21,28 @@ use tauri::{
 };
 use tokio::time::{interval, Duration};
 use vpn_checker::{check_vpn_status, VpnStatus};
+
+/// Translations structure for backend strings
+#[derive(Debug, Clone, Deserialize)]
+struct Translations {
+    tray_connected: String,
+    tray_disconnected: String,
+    tray_show_status: String,
+    tray_quit: String,
+    tray_initial_tooltip: String,
+    notification_title: String,
+    notification_connected: String,
+    notification_disconnected: String,
+}
+
+/// Global current language (defaults to English)
+static CURRENT_LANGUAGE: Lazy<Mutex<String>> = Lazy::new(|| Mutex::new(String::from("en")));
+
+/// Global translations loaded from JSON file
+static TRANSLATIONS: Lazy<HashMap<String, Translations>> = Lazy::new(|| {
+    let json_str = include_str!("../translations.json");
+    serde_json::from_str(json_str).expect("Failed to parse translations.json")
+});
 
 /// Application state shared across threads
 struct AppState {
@@ -30,6 +55,42 @@ enum IconStatus {
     Connected,
     Disconnected,
     Unknown,
+}
+
+/// Gets a translated string for the given key
+/// Falls back to English if current language is not found
+fn get_translation(key: &str) -> String {
+    let lang = CURRENT_LANGUAGE.lock().unwrap();
+    let lang_code = lang.as_str();
+
+    TRANSLATIONS
+        .get(lang_code)
+        .or_else(|| TRANSLATIONS.get("en"))
+        .and_then(|t| match key {
+            "tray.connected" => Some(t.tray_connected.clone()),
+            "tray.disconnected" => Some(t.tray_disconnected.clone()),
+            "tray.showStatus" => Some(t.tray_show_status.clone()),
+            "tray.quit" => Some(t.tray_quit.clone()),
+            "tray.initialTooltip" => Some(t.tray_initial_tooltip.clone()),
+            "notification.title" => Some(t.notification_title.clone()),
+            "notification.connected" => Some(t.notification_connected.clone()),
+            "notification.disconnected" => Some(t.notification_disconnected.clone()),
+            _ => None,
+        })
+        .unwrap_or_else(|| String::from(key))
+}
+
+/// Gets a translated string with variable replacement (for {} placeholders)
+fn get_translation_fmt(key: &str, value: &str) -> String {
+    get_translation(key).replace("{}", value)
+}
+
+/// Tauri command to set the current language
+#[tauri::command]
+fn set_language(language: String) -> Result<String, String> {
+    let mut current_lang = CURRENT_LANGUAGE.lock().unwrap();
+    *current_lang = language.clone();
+    Ok(format!("Language set to: {}", language))
 }
 
 /// Returns the current VPN status from the application state
@@ -130,11 +191,11 @@ fn update_tray_icon(app: &AppHandle, connected: bool) {
 
         // Update tooltip
         let tooltip = if connected {
-            "Mullvad VPN: Connected"
+            get_translation("tray.connected")
         } else {
-            "Mullvad VPN: Disconnected"
+            get_translation("tray.disconnected")
         };
-        let _ = tray.set_tooltip(Some(tooltip));
+        let _ = tray.set_tooltip(Some(&tooltip));
     }
 
     // Update window/taskbar icon
@@ -175,12 +236,12 @@ fn start_status_monitor(app: AppHandle) {
                     // Show notification on status change
                     if status_changed {
                         let message = if status.connected {
-                            format!(
-                                "Connected to {} server",
+                            get_translation_fmt(
+                                "notification.connected",
                                 status.country.as_deref().unwrap_or("Mullvad")
                             )
                         } else {
-                            "VPN connection lost".to_string()
+                            get_translation("notification.disconnected")
                         };
 
                         #[cfg(desktop)]
@@ -189,7 +250,7 @@ fn start_status_monitor(app: AppHandle) {
                             let _ = app
                                 .notification()
                                 .builder()
-                                .title("Mullvad Connection Status")
+                                .title(&get_translation("notification.title"))
                                 .body(&message)
                                 .show();
                         }
@@ -224,8 +285,8 @@ fn load_tray_icon(status: IconStatus) -> Image<'static> {
 /// Sets up the system tray icon and menu
 /// Creates menu items for showing the window and quitting
 fn setup_tray(app: &tauri::App) -> tauri::Result<()> {
-    let show_item = MenuItemBuilder::with_id("show", "Show Status").build(app)?;
-    let quit_item = MenuItemBuilder::with_id("quit", "Quit").build(app)?;
+    let show_item = MenuItemBuilder::with_id("show", &get_translation("tray.showStatus")).build(app)?;
+    let quit_item = MenuItemBuilder::with_id("quit", &get_translation("tray.quit")).build(app)?;
 
     let menu = MenuBuilder::new(app)
         .item(&show_item)
@@ -238,7 +299,7 @@ fn setup_tray(app: &tauri::App) -> tauri::Result<()> {
 
     let _tray = TrayIconBuilder::with_id("main-tray")
         .icon(icon)
-        .tooltip("Mullvad Connection Status")
+        .tooltip(&get_translation("tray.initialTooltip"))
         .menu(&menu)
         .show_menu_on_left_click(false)
         .on_menu_event(|app, event| match event.id.as_ref() {
@@ -319,7 +380,8 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             get_vpn_status,
             toggle_autostart,
-            check_autostart
+            check_autostart,
+            set_language
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

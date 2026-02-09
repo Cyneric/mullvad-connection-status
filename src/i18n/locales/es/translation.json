@@ -1,0 +1,40 @@
+{
+  "loading": "Cargando estado...",
+  "nav": {
+    "backToStatus": "Volver al Estado",
+    "connectionStatus": "Estado de Conexión",
+    "settings": "Configuración"
+  },
+  "status": {
+    "connected": "Conectado",
+    "disconnected": "Desconectado",
+    "protectedVia": "Protegido a través de {{country}}",
+    "trafficProtected": "Tu tráfico está protegido",
+    "noConnection": "No se detectó conexión VPN",
+    "active": "ACTIVO",
+    "inactive": "INACTIVO"
+  },
+  "details": {
+    "title": "Detalles de Conexión",
+    "ipAddress": "Dirección IP",
+    "location": "Ubicación",
+    "server": "Servidor",
+    "protocol": "Protocolo",
+    "unknown": "Desconocido"
+  },
+  "settings": {
+    "title": "Configuración",
+    "description": "Configurar preferencias de la aplicación",
+    "language": "Idioma",
+    "languageDescription": "Selecciona tu idioma preferido",
+    "autoStart": "Iniciar al Arrancar",
+    "autoStartDescription": "Iniciar la aplicación automáticamente al iniciar Windows",
+    "darkMode": "Modo Oscuro",
+    "darkModeDescription": "Cambiar entre tema claro y oscuro"
+  },
+  "titleBar": {
+    "title": "Estado de Mullvad",
+    "minimize": "Minimizar",
+    "close": "Cerrar"
+  }
+}

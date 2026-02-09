@@ -12,6 +12,7 @@
 import { useEffect, useState } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { listen } from '@tauri-apps/api/event';
+import { useTranslation } from 'react-i18next';
 import { StatusCard } from './components/StatusCard';
 import { ConnectionDetails } from './components/ConnectionDetails';
 import { Settings } from './components/Settings';
@@ -36,6 +37,7 @@ interface MullvadStatus {
  * Listens for VPN status updates from the Rust backend and displays them
  */
 function App() {
+  const { t } = useTranslation();
   const [status, setStatus] = useState<MullvadStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState<'status' | 'settings'>('status');
@@ -72,7 +74,7 @@ function App() {
         <div className="flex flex-1 items-center justify-center">
           <div className="flex flex-col items-center gap-3">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-muted border-t-primary"></div>
-            <div className="text-sm text-muted-foreground">Loading status...</div>
+            <div className="text-sm text-muted-foreground">{t('loading')}</div>
           </div>
         </div>
       </div>
@@ -92,12 +94,12 @@ function App() {
             className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeftIcon className="h-4 w-4" />
-            Back to Status
+            {t('nav.backToStatus')}
           </button>
         ) : (
           <div className="flex items-center gap-2">
             <span className="text-lg font-semibold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-              Connection Status
+              {t('nav.connectionStatus')}
             </span>
           </div>
         )}
@@ -105,7 +107,7 @@ function App() {
           <button
             onClick={() => setCurrentPage('settings')}
             className="p-2.5 rounded-lg hover:bg-accent/50 transition-all hover:scale-105"
-            aria-label="Settings"
+            aria-label={t('nav.settings')}
           >
             <SettingsIconSvg className="h-5 w-5" />
           </button>
