@@ -41,7 +41,7 @@
       {
         "title": "Mullvad Connection Status",
         "width": 420,
-        "height": 580,
+        "height": 680,
         "resizable": false,
         "fullscreen": false,
         "decorations": false,
