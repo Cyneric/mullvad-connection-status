@@ -1,9 +1,9 @@
 //! Main Rust application entry point with VPN status monitoring
 //!
 //! @file main.rs
-//! @created 2025-02-01
+//! @created 2026-02-01
 //! @author Christian Blank <christianblank91@gmail.com>
-//! @copyright 2025 Christian Blank
+//! @copyright 2026 Christian Blank
 
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
@@ -24,6 +24,14 @@ struct AppState {
     last_status: Arc<Mutex<Option<VpnStatus>>>,
 }
 
+/// Icon status for visual indicators
+#[derive(Clone, Copy)]
+enum IconStatus {
+    Connected,
+    Disconnected,
+    Unknown,
+}
+
 /// Returns the current VPN status from the application state
 /// Called from the frontend via Tauri command
 #[tauri::command]
@@ -32,19 +40,92 @@ async fn get_vpn_status(state: State<'_, AppState>) -> Result<VpnStatus, String>
     status.clone().ok_or_else(|| "Status not available yet".to_string())
 }
 
-/// Updates the system tray icon based on connection status
+/// Toggles auto-start on Windows boot
+#[tauri::command]
+fn toggle_autostart(enable: bool) -> Result<String, String> {
+    #[cfg(target_os = "windows")]
+    {
+        use std::process::Command;
+        let exe_path = std::env::current_exe()
+            .map_err(|e| e.to_string())?
+            .to_string_lossy()
+            .to_string();
+
+        if enable {
+            Command::new("reg")
+                .args(&[
+                    "add",
+                    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+                    "/v",
+                    "MullvadConnectionStatus",
+                    "/t",
+                    "REG_SZ",
+                    "/d",
+                    &format!("\"{}\"", exe_path),
+                    "/f"
+                ])
+                .output()
+                .map_err(|e| e.to_string())?;
+            Ok("Auto-start enabled".to_string())
+        } else {
+            Command::new("reg")
+                .args(&[
+                    "delete",
+                    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+                    "/v",
+                    "MullvadConnectionStatus",
+                    "/f"
+                ])
+                .output()
+                .map_err(|e| e.to_string())?;
+            Ok("Auto-start disabled".to_string())
+        }
+    }
+
+    #[cfg(not(target_os = "windows"))]
+    {
+        Err("Auto-start only supported on Windows".to_string())
+    }
+}
+
+/// Checks if auto-start is enabled
+#[tauri::command]
+fn check_autostart() -> Result<bool, String> {
+    #[cfg(target_os = "windows")]
+    {
+        use std::process::Command;
+        let output = Command::new("reg")
+            .args(&[
+                "query",
+                "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+                "/v",
+                "MullvadConnectionStatus"
+            ])
+            .output()
+            .map_err(|e| e.to_string())?;
+
+        Ok(output.status.success())
+    }
+
+    #[cfg(not(target_os = "windows"))]
+    {
+        Ok(false)
+    }
+}
+
+/// Updates the system tray icon and window icon based on connection status
 /// Green icon for connected, red for disconnected
 fn update_tray_icon(app: &AppHandle, connected: bool) {
-    if let Some(tray) = app.tray_by_id("main-tray") {
-        // Choose color based on connection status
-        let color = if connected {
-            (0x44, 0xad, 0x4d) // Mullvad green for connected
-        } else {
-            (0xe3, 0x40, 0x39) // Mullvad red for disconnected
-        };
+    // Choose status based on connection
+    let status = if connected {
+        IconStatus::Connected
+    } else {
+        IconStatus::Disconnected
+    };
 
-        // Create new icon with appropriate color
-        let icon = create_tray_icon(color);
+    // Update tray icon
+    if let Some(tray) = app.tray_by_id("main-tray") {
+        let icon = load_tray_icon(status);
         let _ = tray.set_icon(Some(icon));
 
         // Update tooltip
@@ -54,6 +135,12 @@ fn update_tray_icon(app: &AppHandle, connected: bool) {
             "Mullvad VPN: Disconnected"
         };
         let _ = tray.set_tooltip(Some(tooltip));
+    }
+
+    // Update window/taskbar icon
+    if let Some(window) = app.get_webview_window("main") {
+        let icon = load_tray_icon(status);
+        let _ = window.set_icon(icon);
     }
 }
 
@@ -116,44 +203,22 @@ fn start_status_monitor(app: AppHandle) {
     });
 }
 
-/// Creates a simple tray icon with a shield design
-/// Uses raw RGBA data to create a 32x32 icon
-fn create_tray_icon(color: (u8, u8, u8)) -> Image<'static> {
-    let size = 32u32;
-    let mut rgba = vec![0u8; (size * size * 4) as usize];
+/// Loads a tray icon from a PNG file
+/// Icons are located in the src-tauri/icons directory
+fn load_tray_icon(status: IconStatus) -> Image<'static> {
+    let icon_name = match status {
+        IconStatus::Connected => "tray-connected.png",
+        IconStatus::Disconnected => "tray-disconnected.png",
+        IconStatus::Unknown => "tray-unknown.png",
+    };
 
-    // Create a simple shield shape
-    for y in 0..size {
-        for x in 0..size {
-            let idx = ((y * size + x) * 4) as usize;
+    // Load icon from file
+    let icon_path = std::path::Path::new("icons").join(icon_name);
+    let icon_bytes = std::fs::read(&icon_path)
+        .unwrap_or_else(|e| panic!("Failed to load tray icon {:?}: {}", icon_path, e));
 
-            // Simple shield outline shape
-            let cx = size as f32 / 2.0;
-            let cy = size as f32 / 2.0;
-            let dx = x as f32 - cx;
-            let dy = y as f32 - cy;
-
-            // Shield shape: rounded top, pointed bottom
-            let in_shield = if y < size / 2 {
-                // Top half: circle
-                (dx * dx + dy * dy) < (size as f32 / 2.5).powi(2)
-            } else {
-                // Bottom half: triangle pointing down
-                dx.abs() < (size as f32 / 2.5) * (1.0 - (y as f32 - size as f32 / 2.0) / (size as f32 / 2.0))
-            };
-
-            if in_shield {
-                rgba[idx] = color.0;     // R
-                rgba[idx + 1] = color.1; // G
-                rgba[idx + 2] = color.2; // B
-                rgba[idx + 3] = 255;     // A
-            } else {
-                rgba[idx + 3] = 0; // Transparent
-            }
-        }
-    }
-
-    Image::new_owned(rgba, size, size)
+    Image::from_bytes(&icon_bytes)
+        .unwrap_or_else(|e| panic!("Failed to parse tray icon {:?}: {}", icon_path, e))
 }
 
 /// Sets up the system tray icon and menu
@@ -168,8 +233,8 @@ fn setup_tray(app: &tauri::App) -> tauri::Result<()> {
         .item(&quit_item)
         .build()?;
 
-    // Create embedded tray icon with Mullvad blue color
-    let icon = create_tray_icon((0x29, 0x4d, 0x73));
+    // Load tray icon for unknown status (blue shield with question mark)
+    let icon = load_tray_icon(IconStatus::Unknown);
 
     let _tray = TrayIconBuilder::with_id("main-tray")
         .icon(icon)
@@ -232,6 +297,14 @@ pub fn run() {
 
             // Handle window close event to hide instead of quit
             let window = app.get_webview_window("main").unwrap();
+
+            // Set initial window icon for taskbar (unknown status)
+            #[cfg(target_os = "windows")]
+            {
+                let icon = load_tray_icon(IconStatus::Unknown);
+                let _ = window.set_icon(icon);
+            }
+
             let window_clone = window.clone();
             window.on_window_event(move |event| {
                 if let tauri::WindowEvent::CloseRequested { api, .. } = event {
@@ -243,7 +316,11 @@ pub fn run() {
 
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![get_vpn_status])
+        .invoke_handler(tauri::generate_handler![
+            get_vpn_status,
+            toggle_autostart,
+            check_autostart
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -1,13 +1,7 @@
-/**
- * @file release.yml
- *
- * @created 2025-02-01
- * @author Christian Blank <christianblank91@gmail.com>
- *
- * @copyright 2025 Christian Blank
- *
- * @description GitHub Actions workflow for automated release builds
- */
+# GitHub Actions workflow for automated release builds
+# Created: 2026-02-01
+# Author: Christian Blank <christianblank91@gmail.com>
+# Copyright: 2026 Christian Blank
 
 name: Release Build
 
@@ -17,6 +11,9 @@ on:
       - 'v*.*.*'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   create-release:
     runs-on: ubuntu-latest
@@ -25,6 +22,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          lfs: false
+          fetch-depth: 1
+
+      - name: Configure Git line endings
+        run: git config --global core.autocrlf false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -61,6 +64,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          lfs: false
+          fetch-depth: 1
+
+      - name: Configure Git line endings
+        run: git config --global core.autocrlf false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

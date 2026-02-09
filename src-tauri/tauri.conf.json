@@ -19,7 +19,7 @@
       "icons/icon.ico"
     ],
     "publisher": "Christian Blank",
-    "copyright": "Copyright © 2025 Christian Blank",
+    "copyright": "Copyright © 2026 Christian Blank",
     "longDescription": "A lightweight Windows 11 system tray application for monitoring Mullvad VPN connection status in real-time.",
     "shortDescription": "Mullvad VPN connection status indicator",
     "windows": {
@@ -40,15 +40,16 @@
     "windows": [
       {
         "title": "Mullvad Connection Status",
-        "width": 400,
-        "height": 500,
+        "width": 420,
+        "height": 580,
         "resizable": false,
         "fullscreen": false,
-        "decorations": true,
+        "decorations": false,
         "alwaysOnTop": false,
-        "skipTaskbar": true,
+        "skipTaskbar": false,
         "center": true,
-        "visible": false
+        "visible": false,
+        "transparent": false
       }
     ],
     "security": {
