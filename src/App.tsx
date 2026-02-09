@@ -96,7 +96,6 @@ function App() {
           </button>
         ) : (
           <div className="flex items-center gap-2">
-            <div className="h-2 w-2 rounded-full bg-primary animate-pulse"></div>
             <span className="text-lg font-semibold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
               Connection Status
             </span>

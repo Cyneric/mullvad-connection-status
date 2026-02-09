@@ -54,7 +54,6 @@ export function TitleBar({
       )}
     >
       <div className="flex items-center gap-2 flex-1 cursor-move" onMouseDown={handleDragStart}>
-        <div className="w-2 h-2 rounded-full bg-white/60"></div>
         <span className="font-medium text-sm">{title}</span>
       </div>
 

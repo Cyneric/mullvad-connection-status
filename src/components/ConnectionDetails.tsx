@@ -73,7 +73,6 @@ export function ConnectionDetails({ status }: ConnectionDetailsProps) {
     <Card className="shadow-md border-muted/40">
       <CardHeader className="pb-3">
         <CardTitle className="text-lg font-semibold flex items-center gap-2">
-          <div className="h-1.5 w-1.5 rounded-full bg-primary"></div>
           Connection Details
         </CardTitle>
       </CardHeader>

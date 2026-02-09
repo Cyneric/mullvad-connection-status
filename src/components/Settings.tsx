@@ -61,7 +61,6 @@ export function Settings() {
     <Card className="shadow-md border-muted/40">
       <CardHeader className="pb-4">
         <CardTitle className="flex items-center gap-2">
-          <div className="h-1.5 w-1.5 rounded-full bg-primary"></div>
           Settings
         </CardTitle>
         <CardDescription>Configure application preferences</CardDescription>
