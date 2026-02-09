@@ -29,10 +29,16 @@ Continue reading for full development setup instructions below.
 
 This application provides a visual indicator for your Mullvad VPN connection status when running the VPN on a gateway device. It sits quietly in your system tray, changing colors based on your connection state, and displays detailed connection information when needed.
 
+<div align="center">
+  <img src="src/assets/screenshots/screenshot_dark.png" alt="Dark Mode" width="45%">
+  <p><em>Mullvad connection status application - screenshot</em></p>
+</div>
+
 ## Features
 
 - **System Tray Integration** - Unobtrusive tray icon that changes color based on VPN status (green for connected, red for disconnected)
 - **Custom Title Bar** - Modern, draggable window with minimize and close controls that blend with the application design
+- **Dark Mode Support** - Toggle between light and dark themes with persistent preference storage
 - **Real-time Monitoring** - Checks VPN connection status every 15 seconds
 - **Connection Details** - View your current IP address, server location, hostname, and protocol type
 - **Country Flags** - Visual country flag indicators showing which VPN server location you're connected to
